@@ -1,6 +1,6 @@
 # Introduction: Premier League
 The *Premier League* (PL) is the highest level of the English football league system.
-The league was founded in 1922 from the ashes of the old *First Division*, which was England's top-tier football league since 1888.
+The league was founded in 1992 from the ashes of the old *First Division*, which was England's top-tier football league since 1888.
 
 The dataset, which can be found on [Kaggle](https://www.kaggle.com/datasets/evangora/premier-league-data), is made up of 4 csv files: 'matches.csv', 'seasons.csv', 'seasonstats.csv' and 'teams.csv'.
 The information stored in these files refers to 125 football league seasons (First Division from season 1888/1889 to 1991/1992, Premier League from season 1992/1993 to 2023/2024) organized in 4 tables.
