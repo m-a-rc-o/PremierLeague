@@ -1,9 +1,10 @@
 import pandas as pd
 import sqlite3
 
-database_path = '/Users/marcovasallucci/PycharmProjects/PremierLeague/identifier.sqlite'
-conn = sqlite3.connect(database_path)
+import configuration as config
 
-query = 'SELECT * FROM main.matches'
+conn = sqlite3.connect(config.database_path)
+
+query = 'SELECT Venue FROM matches'
 df = pd.read_sql_query(query, conn)
 print(df.head())
