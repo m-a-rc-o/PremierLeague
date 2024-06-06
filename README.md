@@ -18,4 +18,11 @@ the latter, on the other hand, includes match-related statistics for each match 
 
 ## Preliminary operations
 ### Data cleaning and organization
+In the 'data_cleaning.sql' file we apply some minor changes to the 4 tables in order to enhance their readability: in particular we rename most of the columns in the 'matches' and 'seasonstats' tables.
+
+Notice that the 'matches' table contains a lot of empty rows, which we can identify with *invalid matches*; these rows provide only the *Season* information, while all of the other columns have `NULL` values.
+We handle these rows in the 'invalid_matches.sql' file. The first query of the file counts the total number of invalid matches, and finds a total of 9961 empty rows distributed across the 125 seasons. 
+Then we create a new table, called 'invalid_matches', in which we store information about the number of invalid matches for each season, identified by its unique *SeasonID*.
+Finally, we delete all the empty rows from the 'matches' table.
+
 ### Obtaining the relevant tables
