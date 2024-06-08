@@ -15,13 +15,13 @@ ALTER TABLE matches
 RENAME COLUMN xG TO ExpectedGoalsHome;
 
 ALTER TABLE matches
-RENAME COLUMN "Home Goals" TO HomeGoals;
+RENAME COLUMN `Home Goals` TO HomeGoals;
 
 ALTER TABLE matches
-RENAME COLUMN "Away Goals" TO AwayGoals;
+RENAME COLUMN `Away Goals` TO AwayGoals;
 
 ALTER TABLE matches
-RENAME COLUMN "xG.1" TO ExpectedGoalsAway;
+RENAME COLUMN `xG.1` TO ExpectedGoalsAway;
 
 -- Adding descriptive names for columns in 'seasonstats'
 ALTER TABLE seasonstats
@@ -61,7 +61,7 @@ ALTER TABLE seasonstats
 RENAME COLUMN Att TO PassesAttempted;
 
 ALTER TABLE seasonstats
-RENAME COLUMN "Cmp%" TO PassCompletionRate;
+RENAME COLUMN `Cmp%` TO PassCompletionRate;
 
 ALTER TABLE seasonstats
 RENAME COLUMN CK TO CornerKicks;
