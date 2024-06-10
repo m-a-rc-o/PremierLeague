@@ -99,4 +99,4 @@ ORDER BY s1.Season;
 ```
 
 Similarly, for the *GoalsScored* and *GoalsConceded* ranking we choose to classify the teams with the **same** number of goals scored (or conceded)
-according to number of points and goal difference.
+according to number of points and goal difference (or goal average, for the years before 1976/1977). 
