@@ -16,6 +16,9 @@ the latter, on the other hand, includes match-related statistics for each match 
 4. Average statistics (number of seasons played in the PL, number of goals per season, number of yellow and red cards per season, etc...) for each team.
 5. Deep analysis of Manchester City's statistics in the season 2023/2024, in which the team won the PL.
 
+## Project outline
+Coming soon...
+
 ## Project walkthrough
 ### Data cleaning and organization
 In the 'data_cleaning.sql' file we apply some minor changes to the 4 tables in order to enhance their readability: in particular we rename most of the columns in the 'matches' and 'seasonstats' tables.
@@ -27,8 +30,7 @@ Finally, we delete all the empty rows from the 'matches' table.
 
 ### Obtaining the relevant tables
 #### Final positions
-First of all, we need to define a stored procedure that takes a single parameter, namely the *SeasonID*, and provides information about the teams' ranking
-with respect to *Points*, *GoalsScored* and *GoalsConceded*.
+First of all, we need a table that  provides information about the teams' ranking with respect to *Points*, *GoalsScored* and *GoalsConceded* in every season. We will call this table *FinalPositions*.
 A question that naturally arises in this context is how to determine the positions in the ranking of two teams who finish the season with the **same** number of points.
 According to the [official Premier League website](https://www.premierleague.com/premier-league-explained), "if any clubs finish with the same number of points, their position in the Premier League table is determined by goal difference, then the number of goals scored, then the team who collected the most points in the head-to-head matches, then who scored most away goals in the head-to-head".
 This criterion, however, had only been adopted since the 1976/1977 season; in every season up to 1975/1976, **goal average** (the total number of goals scored divided by the total number of goals conceded) was used instead of goal difference.
@@ -99,4 +101,38 @@ ORDER BY s1.Season;
 ```
 
 Similarly, for the *GoalsScored* and *GoalsConceded* ranking we choose to classify the teams with the **same** number of goals scored (or conceded)
-according to number of points and goal difference (or goal average, for the years before 1976/1977). 
+according to number of points and goal difference (or goal average, for the years before 1976/1977).
+In the file 'ranking_views.sql' we create the following views:
+- *PointsRanking*, which provides the teams' ranking (according to points) in every season;
+- *GoalsScoredRanking*, which provides the teams' ranking (according to number of goals scored) in every season;
+- *GoalsConcededRanking*, which provides the teams' ranking (according to number of goals conceded) in every season.
+
+Finally we create the table *FinalPositions* by appropriately joining these views. 
+
+#### PointsVsPositions
+Now we need a table, which we will call *PointsVSPositions*, which provides information about the number of points needed to, respectively, win the league and not be relegated to Second Division.
+To create this table we need to know, for each season, the number of points of the **2nd classified**, as this number represents a lower limit to the number of points needed to win the league;
+we also need the number of points of the **last relegated team** (i.e. the highest ranked team among those that are then relegated), as this constitutes a lower limit to the number of points
+needed to remain in First Division.
+
+To obtain this information, we have to be careful about some subtleties:
+1. we must distinguish between the seasons in which the two-points-per-win rule was applied and the seasons in which three points were awarded to every win;
+2. we must distinguish between seasons with different numbers of participating teams;
+3. we must obtain, for each season, the number of teams which were relegated, in order to obtain the ranking of the last relegated team.
+
+The Premier League (or, formerly, the First Division) awards three points for each win since the 1981/1982 season;
+this rule was originally adopted to reward a more attacking style of play, and it replaced the old rule (according to which two points were awarded for each win)
+which had been used up to the 1980/1981 season.
+For the moment, we will concentrate on determining the minimum number of points required to win the league;
+we will address the problem of relegated teams later on in the project.
+
+In the file 'points_vs_positions.sql' we create the following views:
+- *FirstClassified*, which determines the teams that finish 1st in the league for each season, along with their number of points;
+- *SecondClassified*, which performs the same analysis for the teams that finish 2nd;
+- *ParticipatingTeams*, which calculates the number of participating teams in each edition of the league.
+
+We then proceed to create the table *PointsVsPositions* by appropriately joining these views.
+
+
+### Relegated teams
+Coming soon...
