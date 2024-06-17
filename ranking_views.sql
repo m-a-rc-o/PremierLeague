@@ -1,4 +1,4 @@
--- DROPPING ANY EXISTING VIEWS OR TABLES
+-- DROP ANY EXISTING VIEWS OR TABLES
 
 DROP VIEW IF EXISTS PointsRanking;
 DROP VIEW IF EXISTS GoalsScoredRanking;
@@ -93,6 +93,7 @@ WHERE Season >= '1976/1977';
 -- CREATE THE FINAL POSITIONS TABLE
 
 CREATE TABLE FinalPositions (
+    SeasonID int,
     Season text,
     Team text,
     Points int,
@@ -107,7 +108,8 @@ CREATE TABLE FinalPositions (
 
 -- Insert data from the views
 INSERT INTO FinalPositions
-SELECT PR.Season,
+SELECT s.SeasonID,
+       PR.Season,
        PR.Team,
        PR.Points,
        PR.GoalsScored,
@@ -118,6 +120,8 @@ SELECT PR.Season,
        PR.GoalDifference,
        PR.GoalAverage
 FROM pointsranking AS PR
+JOIN seasons AS s
+ON PR.Season = s.Season
 JOIN goalsscoredranking AS GSR
 ON PR.Season = GSR.Season
 AND PR.Team = GSR.Team

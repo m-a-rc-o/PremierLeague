@@ -1,4 +1,4 @@
--- DROPPING ANY EXISTING VIEWS OR TABLES
+-- DROP ANY EXISTING VIEWS OR TABLES
 
 DROP VIEW IF EXISTS FirstClassified;
 DROP VIEW IF EXISTS SecondClassified;
@@ -31,6 +31,7 @@ GROUP BY Season;
 
 -- CREATE THE POINTS VS POSITIONS TABLE
 CREATE TABLE PointsVsPositions (
+    SeasonID int,
     Season text,
     NumberOfTeams int,
     First text,
@@ -42,7 +43,8 @@ CREATE TABLE PointsVsPositions (
 
 -- Insert data from the views
 INSERT INTO PointsVsPositions
-SELECT fc.Season,
+SELECT s.SeasonID,
+       fc.Season,
        pt.NumberOfTeams,
        fc.Team,
        fc.Points,
@@ -53,6 +55,8 @@ SELECT fc.Season,
            ELSE 3
        END
 FROM FirstClassified AS fc
+JOIN seasons AS s
+ON fc.Season = s.Season
 JOIN SecondClassified AS sc
 ON fc.Season = sc.Season
 JOIN ParticipatingTeams AS pt
