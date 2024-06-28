@@ -96,3 +96,99 @@ def try_get_season_id(season):
             season = input("Please enter a valid season: ")
 
     return season_id
+
+
+def list_of_seasons(team: str) -> list[str]:
+    """Get the list of seasons in which
+    the given team participated in the PL."""
+    seasons = []
+    for i in range(125):
+        try:
+            season = final_positions.at[(team, i), "Season"]
+            seasons.append(season)
+        except KeyError:
+            continue
+
+    return seasons
+
+
+def get_valid_seasons_options(team: str, all_seasons: list[str]) -> list[dict]:
+    """Get the list of valid seasons options for a given team."""
+    valid_seasons = list_of_seasons(team)
+    valid_seasons_options = [{"label": season, "value": season} for season in all_seasons]
+    for item in valid_seasons_options:
+        if item["value"] in valid_seasons:
+            item["disabled"] = False
+        else:
+            item["disabled"] = True
+
+    return valid_seasons_options
+
+
+def list_of_teams(season: str, all_teams: list[str]) -> list[str]:
+    """Get the list of teams that participated
+    in the league in the given season."""
+    list_of_indices = final_positions.index.tolist()
+    season_id = try_get_season_id(season)
+    participating_teams = []
+
+    for team in all_teams:
+        index = (team, season_id)
+        if index in list_of_indices:
+            participating_teams.append(team)
+
+    return participating_teams
+
+
+def get_data(team: str, season: str, fields: list[str], labels: list[str]):
+    """Get all the requested stats for the team in the given season."""
+    # Obtain the season_id and the DataFrame
+    season_id = try_get_season_id(season)
+    df = data.loc[(team, season_id), :].to_frame(name=team).T
+
+    # Obtain the numerical values
+    values = df[fields].to_numpy()[0]
+
+    # Obtain a boolean mask with the null fields
+    null_fields = [df[fields].isnull().at[team, field] for field in fields]
+
+    # Create dictionary with valid fields among those requested
+    updated_quantities = {labels[i]: values[i] for i in range(len(values)) if not null_fields[i]}
+    new_values = [round(value, 2) for value in list(updated_quantities.values())]
+    new_labels = list(updated_quantities.keys())
+
+    return new_values, new_labels
+
+
+def other_teams(team: str, season: str, all_teams: list[str]) -> dict[str, int]:
+    """Get the list of the two teams preceding and following
+    the requested team in the given season (if they exist)."""
+    # Find the participating teams and the season_id
+    participating_teams = list_of_teams(season, all_teams)
+    season_id = try_get_season_id(season)
+
+    # Obtain the position of the given team
+    given_team_position = final_positions.at[(team, season_id), "Position"]
+
+    # Obtain the other team's positions (including the position of the given team)
+    positions = [(given_team_position - i) for i in range(2, -3, -1)]
+
+    requested_teams = dict()
+    for team in participating_teams:
+        try:
+            position = final_positions.at[(team, season_id), "Position"]
+            if position in positions:
+                requested_teams[team] = position
+            else:
+                continue
+        except KeyError:
+            continue
+
+    # Order the dictionary by value
+    ordered_teams = dict()
+    for i in positions:
+        for key, value in requested_teams.items():
+            if value == i:
+                ordered_teams[key] = value
+
+    return ordered_teams
