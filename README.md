@@ -24,10 +24,11 @@ The project is structured as follows.
 2. **Obtaining the relevant tables** – In this section we build some useful tables in order to give a meaningful structure to the raw data.
 3. **Visualizing the data** – We proceed to create interactive plots using the data from the new tables.
 4. **Searching patterns** – We explore the relationship between *goals scored and conceded* and the *final position of a team in the league* using multiple linear regression. We also summarize the main results of the project and provide some sample visualizations of the data.
+5. **General statistics** – We create an interactive dashboard that illustrates some of the most relevant statistics for each team in a given season.
 
 In this project we are going to use the following tools.
 - **Programming languages**: Python, SQL
-- **Data processing and visualization tools**: Pandas, Seaborn, Pygal
+- **Data processing and visualization tools**: Pandas, Seaborn, Pygal, Dash, Plotly
 - **Machine Learning libraries**: Scikit-learn
 
 ## Project walkthrough
@@ -178,3 +179,6 @@ a line chart showing the final positions of the teams in the list in the years b
 
 ### Searching patterns
 This section is explored in the notebook 'searching_patterns.ipynb'.
+
+### General statistics
+Run the file 'main.py' to open an interactive dashboard that provides an overview of the statistics of the Premier League.
